@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { auth } from "@clerk/nextjs/server";
 import { createProfileAction, getProfileByUserIdAction } from "@/actions/profiles-actions";
+import Header from "@/components/header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -44,6 +45,7 @@ export default async function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <Providers attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <Header />
             {children}
             <Toaster />
           </Providers>
