@@ -33,7 +33,7 @@ export default async function RootLayout({
 
   if (userId) {
     const profile = await getProfileByUserIdAction(userId);
-    if (!profile) {
+    if (!profile.data) {
       await createProfileAction({ userId });
     }
   }
