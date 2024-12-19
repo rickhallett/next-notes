@@ -18,7 +18,7 @@ export const getProfileByUserId = async (userId: string) => {
       where: eq(profilesTable.userId, userId)
     });
 
-    return profile;
+    return profile || null;
   } catch (error) {
     console.error("Error getting profile by user ID:", error);
     throw new Error("Failed to get profile");
