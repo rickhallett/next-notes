@@ -17,7 +17,7 @@ interface HomeProps {
   score?: number;
 }
 
-export default function Home({ score = 5000 }: HomeProps) {
+export default function Home({ score = 10 }: HomeProps) {
   // Calculate percentage (logarithmic scale)
   const getLogPercentage = (value: number) => {
     if (value <= 0) return 0;
@@ -54,7 +54,7 @@ export default function Home({ score = 5000 }: HomeProps) {
                   }}
                 >
                   <div className="w-4 h-1 bg-primary" />
-                  <span className="text-sm whitespace-nowrap">{level.label}</span>
+                  <span className="text-sm whitespace-nowrap pl-4">{level.label}</span>
                 </div>
               );
             })}
