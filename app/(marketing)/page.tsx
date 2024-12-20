@@ -33,10 +33,11 @@ export default function Home({ score = 10 }: HomeProps) {
       <div className="h-[80vh] flex items-center">
         <div className="relative h-full w-24">
           {/* Vertical Progress Bar */}
-          <div className="absolute h-full w-4 left-4 rotate-180">
+          <div className="absolute h-full w-4 left-4">
             <Progress
               value={percentage}
-              className="h-full w-4 rotate-180"
+              orientation="vertical"
+              className="h-full"
             />
           </div>
 
