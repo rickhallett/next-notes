@@ -17,13 +17,14 @@ interface HomeProps {
   score?: number;
 }
 
-export default function Home({ score = 10 }: HomeProps) {
-  // Calculate percentage (logarithmic scale)
+export default function Home({ score = 210 }: HomeProps) {
+
+
   const getLogPercentage = (value: number) => {
     if (value <= 0) return 0;
-    const logValue = Math.log(value + 1); // Add 1 to handle score of 0
-    const logMax = Math.log(1000001); // Max value + 1
-    return (logValue / logMax) * 100;
+    const logValue = Math.log(value + 1);
+    const logMax = Math.log(1000001);
+    return (logValue / logMax) * 100;  // Invert the final percentage                                                                                                    
   };
 
   const percentage = getLogPercentage(score);
