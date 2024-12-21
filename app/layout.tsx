@@ -4,7 +4,7 @@ import { Providers } from "@/components/utilities/providers";
 import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import { auth } from "@clerk/nextjs/server";
+import { auth, getAuth } from "@clerk/nextjs/server";
 import { createProfileAction, getProfileByUserIdAction } from "@/actions/profiles-actions";
 import Header from "@/components/header";
 
@@ -29,14 +29,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { userId } = await auth();
+  // const { userId } = await auth();
+  // const { user } = await getAuth();
 
-  if (userId) {
-    const profile = await getProfileByUserIdAction(userId);
-    if (!profile.data) {
-      await createProfileAction({ userId });
-    }
-  }
+  // if (userId) {
+  //   const profile = await getProfileByUserIdAction(userId);
+  //   if (!profile.data) {
+  //     await createProfileAction({ userId, email: user?.emailAddresses[0]?.emailAddress || '' });
+  //   }
+  // }
 
   return (
     <ClerkProvider>
