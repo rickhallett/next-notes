@@ -13,12 +13,8 @@ const LEVELS = [
   { threshold: 0, label: "Humble Peasant 🌾" },
 ];
 
-interface HomeProps {
-  score?: number;
-}
-
-export default function Home({ score = 210 }: HomeProps) {
-
+export default function Home() {
+  const score = 210;
 
   const getLogPercentage = (value: number) => {
     if (value <= 0) return 0;

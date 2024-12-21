@@ -1,10 +1,12 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { profilesTable, InsertProfile, SelectProfile } from "../schema/profiles-schema";
+import { createPoints } from "./points-queries";
 
 export const createProfile = async (data: InsertProfile) => {
   try {
     const [profile] = await db.insert(profilesTable).values(data).returning();
+    const points = await createPoints({ userId: profile.userId, points: 0 });
     return profile;
   } catch (error) {
     console.error(error);
