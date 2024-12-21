@@ -10,7 +10,7 @@ import { SelectProfile } from '@/db/schema/profiles-schema';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
 import { useEmailNotification } from '@/hooks/use-email-notification';
-import { LEVELS } from '@/app/page';
+import { LEVELS } from '@/constants/levels';
 
 interface User {
   userId: string;
