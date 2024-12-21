@@ -10,7 +10,7 @@ export const profilesTable = pgTable("profiles", {
   stripeSubscriptionId: text("stripe_subscription_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull().$onUpdate(() => new Date()),
-  email: varchar("email", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).default("").notNull(),
 });
 
 export type SelectProfile = typeof profilesTable.$inferSelect;

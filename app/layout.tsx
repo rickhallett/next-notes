@@ -29,16 +29,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // const { userId } = await auth();
-  // const { user } = await getAuth();
+  const { userId } = await auth();
 
-  // if (userId) {
-  //   const profile = await getProfileByUserIdAction(userId);
-  //   if (!profile.data) {
-  //     await createProfileAction({ userId, email: user?.emailAddresses[0]?.emailAddress || '' });
-  //   }
-  // }
-
+  if (userId) {
+    const profile = await getProfileByUserIdAction(userId);
+    if (!profile.data) {
+      await createProfileAction({ userId });
+    }
+  }
   return (
     <ClerkProvider>
       <html lang="en">
@@ -55,3 +53,4 @@ export default async function RootLayout({
     </ClerkProvider>
   );
 }
+
