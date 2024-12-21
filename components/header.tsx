@@ -30,7 +30,7 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-primary text-primary-foreground shadow-md">
+    <header className="bg-zinc-950 text-secondary-foreground shadow-md">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Crown className="h-6 w-6" />
@@ -69,23 +69,15 @@ export default function Header() {
       {isMenuOpen && (
         <nav className="md:hidden bg-primary-foreground text-primary p-4">
           <ul className="space-y-2">
-            <li>
-              <Link
-                href="/"
-                className="block hover:underline"
-                onClick={toggleMenu}
-              >
-                Home
-              </Link>
-            </li>
             <SignedIn>
               <li>
                 <Link
-                  href="/notes"
+                  href="/admin"
                   className="block hover:underline"
                   onClick={toggleMenu}
+                  hidden={!profile?.isAdmin}
                 >
-                  Notes
+                  Admin
                 </Link>
               </li>
             </SignedIn>
