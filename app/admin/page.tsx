@@ -78,7 +78,7 @@ export default function AdminPage() {
             {users.map((user) => (
               <div
                 key={user.userId}
-                className={`p-2 border rounded cursor-pointer ${selectedUser?.userId === user.userId ? 'bg-blue-100' : ''
+                className={`p-2 border rounded cursor-pointer ${selectedUser?.userId === user.userId ? 'bg-secondary' : ''
                   }`}
                 onClick={() => setSelectedUser(user)}
               >

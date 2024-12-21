@@ -49,7 +49,7 @@ export default function Home() {
   const percentage = getLogPercentage(points?.points || 0);
 
   return (
-    <div className="min-h-screen flex items-start justify-center p-4">
+    <div className="min-h-screen flex flex-col items-center justify-start p-4">
       <div className="h-[80vh] flex items-center">
         <div className="relative h-full flex">
           {/* Container for numbers and progress bar */}
@@ -108,6 +108,16 @@ export default function Home() {
                 </span>
               ))}
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* New points display card */}
+      <div className="bg-card border rounded-lg p-4 shadow-sm w-full">
+        <div className="flex flex-row justify-center items-center">
+          <div className="text-xl font-semibold">Princess Points:</div>
+          <div className={`text-xl font-bold ml-2 ${points?.points && points.points > 0 ? 'text-green-500' : 'text-red-500'}`}>
+            {points?.points?.toLocaleString() || '0'}
           </div>
         </div>
       </div>
