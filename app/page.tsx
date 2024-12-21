@@ -1,20 +1,43 @@
+"use client";
+
+import { getPointsByUserIdAction } from "@/actions/points-actions";
+import { getProfileByUserIdAction } from "@/actions/profiles-actions";
 import { Progress } from "@/components/ui/progress";
+import { SelectProfile } from "@/db/schema/profiles-schema";
+import { SelectPoints } from "@/db/schema/points-schema";
+import { useAuth } from "@clerk/nextjs";
+import { useEffect, useState } from "react";
 
 const LEVELS = [
   { threshold: 1000000, label: "Queen Supreme 👑" },
-  { threshold: 500000, label: "Royal Highness 👸" },
-  { threshold: 250000, label: "Princess Powerful 💫" },
-  { threshold: 100000, label: "Duchess of Delight ✨" },
-  { threshold: 50000, label: "Countess Cool 🌟" },
-  { threshold: 10000, label: "Lady Lovely 🎀" },
-  { threshold: 5000, label: "Noble Novice 🌼" },
-  { threshold: 1000, label: "Aspiring Aristocrat 🌱" },
-  { threshold: 100, label: "Peasant Plus ⭐" },
-  { threshold: 0, label: "Humble Peasant 🌾" },
+  { threshold: 500000, label: "Queen in Waiting 👸" },
+  { threshold: 250000, label: "Princess 💫" },
+  { threshold: 100000, label: "Duchess ✨" },
+  { threshold: 50000, label: "Countess 🌟" },
+  { threshold: 10000, label: "Lady 🎀" },
+  { threshold: 5000, label: "Properly Dressed 🌼" },
+  { threshold: 1000, label: "Noble Aspirant 🌱" },
+  { threshold: 100, label: "Neophyte 🌾" },
+  { threshold: 0, label: "Peasant 🌾" },
 ];
 
 export default function Home() {
-  const score = 210;
+  const { userId, isLoaded } = useAuth();
+  const [profile, setProfile] = useState<SelectProfile | null>(null);
+  const [points, setPoints] = useState<SelectPoints | null>(null);
+
+  useEffect(() => {
+    const getProfile = async () => {
+      if (isLoaded && userId) {
+        const profile = await getProfileByUserIdAction(userId as string);
+        const points = await getPointsByUserIdAction(userId as string);
+        setProfile(profile.data);
+        setPoints(points.data);
+      }
+    }
+
+    getProfile();
+  }, [isLoaded, userId]);
 
   const getLogPercentage = (value: number) => {
     if (value <= 0) return 0;
@@ -23,39 +46,68 @@ export default function Home() {
     return (logValue / logMax) * 100;  // Invert the final percentage                                                                                                    
   };
 
-  const percentage = getLogPercentage(score);
+  const percentage = getLogPercentage(points?.points || 0);
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-start justify-center p-4">
       <div className="h-[80vh] flex items-center">
-        <div className="relative h-full w-24">
-          {/* Vertical Progress Bar */}
-          <div className="absolute h-full w-4 left-4">
-            <Progress
-              value={percentage}
-              orientation="vertical"
-              className="h-full"
-            />
-          </div>
-
-          {/* Level Markers */}
-          <div className="absolute h-full w-full">
-            {LEVELS.map((level) => {
-              const levelPercentage = getLogPercentage(level.threshold);
-              return (
-                <div
+        <div className="relative h-full flex">
+          {/* Container for numbers and progress bar */}
+          <div className="flex h-full">
+            {/* Numbers column */}
+            <div className="relative h-[90%] my-auto pr-2" style={{ width: '80px' }}>
+              {LEVELS.map((level) => (
+                <span
                   key={level.threshold}
-                  className="absolute flex items-center gap-2"
+                  className="absolute text-sm text-right w-full pr-2"
                   style={{
-                    bottom: `${levelPercentage}%`,
-                    transform: 'translateY(50%)',
+                    bottom: `${getLogPercentage(level.threshold)}%`,
+                    transform: 'translateY(50%)'
                   }}
                 >
-                  <div className="w-4 h-1 bg-primary" />
-                  <span className="text-sm whitespace-nowrap pl-4">{level.label}</span>
-                </div>
-              );
-            })}
+                  {level.threshold.toLocaleString()}
+                </span>
+              ))}
+            </div>
+
+            {/* Progress bar and markers column */}
+            <div className="relative w-4 h-[90%] my-auto">
+              <Progress
+                value={percentage}
+                orientation="vertical"
+                className="h-full absolute"
+              />
+              {/* Markers */}
+              <div className="absolute h-full w-full">
+                {LEVELS.map((level) => (
+                  <div
+                    key={level.threshold}
+                    className="absolute w-8 h-1 bg-primary"
+                    style={{
+                      bottom: `${getLogPercentage(level.threshold)}%`,
+                      transform: 'translateY(50%)',
+                      left: 0
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Labels column */}
+            <div className="relative h-[90%] my-auto pl-4" style={{ width: '160px' }}>
+              {LEVELS.map((level) => (
+                <span
+                  key={level.threshold}
+                  className="absolute text-sm whitespace-nowrap pl-2"
+                  style={{
+                    bottom: `${getLogPercentage(level.threshold)}%`,
+                    transform: 'translateY(50%)'
+                  }}
+                >
+                  {level.label}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </div>

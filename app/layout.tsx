@@ -20,8 +20,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Next Notes",
-  description: "A simple note-taking app built with Next.js",
+  title: "Game of Thrones",
+  description: "",
 };
 
 export default async function RootLayout({

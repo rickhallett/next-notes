@@ -22,3 +22,7 @@ Follow these instructions to create new frontend components.
 
 - Client components need 'use client' at the top of the file. So anytime you use useState, useEffect, useContext, useRef, etc. you need to use 'use client' at the top of the file.
 - Always use client components for user interaction and other client-specific logic.
+
+### Design
+- Always use shadcn/ui for the design of the components.
+- Code for mobile first
