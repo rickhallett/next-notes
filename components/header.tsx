@@ -2,12 +2,28 @@
 
 import { Button } from "@/components/ui/button";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { CheckSquare, Menu, X } from "lucide-react";
+import { Menu, X, Crown } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { getProfileByUserIdAction } from "@/actions/profiles-actions";
+import { SelectProfile } from "@/db/schema/profiles-schema";
 
 export default function Header() {
+  const { userId, isLoaded } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [profile, setProfile] = useState<SelectProfile | null>(null);
+
+  useEffect(() => {
+    const checkAdmin = async () => {
+      if (isLoaded && userId) {
+        const profile = await getProfileByUserIdAction(userId) as { data: SelectProfile };
+        setProfile(profile.data);
+      }
+    };
+
+    checkAdmin();
+  }, [isLoaded, userId]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -17,22 +33,17 @@ export default function Header() {
     <header className="bg-primary text-primary-foreground shadow-md">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <CheckSquare className="h-6 w-6" />
-          <h1 className="text-xl font-bold">AI Notes App</h1>
+          <Crown className="h-6 w-6" />
+          <h1 className="text-xl font-bold">Game of Thrones</h1>
         </div>
         <nav className="hidden md:flex space-x-4">
-          <Link
-            href="/"
-            className="hover:underline"
-          >
-            Home
-          </Link>
           <SignedIn>
             <Link
-              href="/notes"
+              href="/admin"
               className="hover:underline"
+              hidden={!profile?.isAdmin}
             >
-              Notes
+              Admin
             </Link>
           </SignedIn>
         </nav>
