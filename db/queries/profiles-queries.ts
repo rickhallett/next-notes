@@ -2,10 +2,32 @@ import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { profilesTable, InsertProfile, SelectProfile } from "../schema/profiles-schema";
 import { createPoints } from "./points-queries";
+import { auth } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs/server";
 
 export const createProfile = async (data: InsertProfile) => {
   try {
-    const [profile] = await db.insert(profilesTable).values(data).returning();
+    // Get the user's email from Clerk
+    const { userId } = await auth();
+    if (!userId) throw new Error("No user ID found");
+
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const primaryEmail = user.emailAddresses.find(
+      email => email.id === user.primaryEmailAddressId
+    )?.emailAddress;
+
+    if (!primaryEmail) {
+      throw new Error("No email address found for user");
+    }
+
+    // Add email to the profile data
+    const profileData = {
+      ...data,
+      email: primaryEmail
+    };
+
+    const [profile] = await db.insert(profilesTable).values(profileData).returning();
     const points = await createPoints({ userId: profile.userId, points: 0 });
     return profile;
   } catch (error) {

@@ -36,6 +36,13 @@
       "when": 1734772512039,
       "tag": "0004_workable_norrin_radd",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1734778813215,
+      "tag": "0005_lucky_steel_serpent",
+      "breakpoints": true
     }
   ]
 }

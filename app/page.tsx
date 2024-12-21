@@ -8,7 +8,7 @@ import { SelectPoints } from "@/db/schema/points-schema";
 import { useAuth } from "@clerk/nextjs";
 import { useEffect, useState } from "react";
 
-const LEVELS = [
+export const LEVELS = [
   { threshold: 1000000, label: "Queen Supreme 👑" },
   { threshold: 500000, label: "Queen in Waiting 👸" },
   { threshold: 250000, label: "Princess 💫" },
@@ -19,7 +19,7 @@ const LEVELS = [
   { threshold: 1000, label: "Noble Aspirant 🌱" },
   { threshold: 100, label: "Neophyte 🌾" },
   { threshold: 0, label: "Peasant 🌾" },
-];
+].reverse();
 
 export default function Home() {
   const { userId, isLoaded } = useAuth();
@@ -49,7 +49,7 @@ export default function Home() {
   const percentage = getLogPercentage(points?.points || 0);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start p-4">
+    <div className="max-h-screen flex flex-col items-center justify-start p-4">
       <div className="h-[80vh] flex items-center">
         <div className="relative h-full flex">
           {/* Container for numbers and progress bar */}

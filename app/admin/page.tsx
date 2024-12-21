@@ -9,6 +9,8 @@ import { getProfileByUserIdAction } from '@/actions/profiles-actions';
 import { SelectProfile } from '@/db/schema/profiles-schema';
 import { Separator } from '@/components/ui/separator';
 import { Input } from '@/components/ui/input';
+import { useEmailNotification } from '@/hooks/use-email-notification';
+import { LEVELS } from '@/app/page';
 
 interface User {
   userId: string;
@@ -22,6 +24,7 @@ export default function AdminPage() {
   const { userId } = useAuth();
   const [isAdmin, setIsAdmin] = useState(false);
   const [pointsToAdd, setPointsToAdd] = useState(0);
+  const { sendPointsUpdateEmail } = useEmailNotification();
 
   useEffect(() => {
     fetchUsers();
@@ -57,9 +60,37 @@ export default function AdminPage() {
     const result = await incrementPointsAction(selectedUser.userId, amount);
 
     if (result.status === 'success') {
-      fetchUsers(); // Refresh the user list
-      const updatedUser = users.find(u => u.userId === selectedUser.userId);
-      setSelectedUser(updatedUser || null);
+      const updatedPoints = result.data.points;
+
+      setUsers(prevUsers =>
+        prevUsers.map(user =>
+          user.userId === selectedUser.userId
+            ? { ...user, points: updatedPoints }
+            : user
+        )
+      );
+      setSelectedUser(prev => prev ? { ...prev, points: updatedPoints } : null);
+
+      let rank = LEVELS[0].label;
+      for (const level of LEVELS) {
+        if (updatedPoints >= level.threshold) {
+          rank = level.label;
+        }
+      }
+
+      const profileEmail = await getProfileByUserIdAction(selectedUser.userId);
+
+      console.log({ selectedUser, profileEmail, rank, updatedPoints });
+
+      if (profileEmail.data.email) {
+        await sendPointsUpdateEmail({
+          email: profileEmail.data.email,
+          to_email: profileEmail.data.email,
+          current_points: updatedPoints,
+          rank: rank,
+          points_change: amount,
+        });
+      }
     }
   };
 
