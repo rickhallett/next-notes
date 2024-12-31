@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEventHandler } from "react";
 import { useAuth, useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
@@ -92,7 +92,7 @@ export default function AdminPage() {
 
       const profileEmail = await getProfileByUserIdAction(selectedUser.userId);
 
-      console.log({ selectedUser, profileEmail, rank, updatedPoints });
+      console.log({ selectedUser, profileEmail, rank, updatedPoints, reason });
 
       if (profileEmail.data.email) {
         await sendPointsUpdateEmail({
@@ -109,6 +109,10 @@ export default function AdminPage() {
 
   if (!isAdmin) {
     return <div className="p-4">Access denied. Admin only.</div>;
+  }
+
+  function setPointsHandler(e: any) {
+    setPointsToAdd(parseInt(e.target.value));
   }
 
   return (
@@ -183,7 +187,7 @@ export default function AdminPage() {
                 type="number"
                 className="w-20"
                 value={pointsToAdd}
-                onChange={(e) => setPointsToAdd(parseInt(e.target.value))}
+                onChange={(e) => setPointsHandler(e)}
               />
               <Button
                 variant="outline"

@@ -18,6 +18,7 @@ export const useEmailNotification = () => {
         current_points: params.current_points,
         rank: params.rank,
         points_change: params.points_change,
+        reason: params.reason,
       };
 
       console.log(templateParams);
