@@ -1,4 +1,4 @@
-import emailjs from '@emailjs/browser';
+import emailjs from "@emailjs/browser";
 
 interface EmailParams {
   email: string;
@@ -6,13 +6,14 @@ interface EmailParams {
   rank: string;
   points_change: number;
   current_points: number;
+  reason?: string;
 }
 
 export const useEmailNotification = () => {
   const sendPointsUpdateEmail = async (params: EmailParams) => {
     try {
       const templateParams = {
-        email: 'kai@oceanheart.ai',
+        email: "kai@oceanheart.ai",
         to_email: params.email,
         current_points: params.current_points,
         rank: params.rank,
@@ -30,12 +31,12 @@ export const useEmailNotification = () => {
 
       console.log(result);
 
-      return { status: 'success', data: result };
+      return { status: "success", data: result };
     } catch (error) {
-      console.error('Error sending email:', error);
-      return { status: 'error', error };
+      console.error("Error sending email:", error);
+      return { status: "error", error };
     }
   };
 
   return { sendPointsUpdateEmail };
-}; 
+};

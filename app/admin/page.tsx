@@ -101,6 +101,7 @@ export default function AdminPage() {
           current_points: updatedPoints,
           rank: rank,
           points_change: amount,
+          reason: reason,
         });
       }
     }
